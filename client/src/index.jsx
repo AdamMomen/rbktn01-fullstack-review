@@ -3,27 +3,39 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
-
+import Repos from './components/Repos.jsx';
+import Link from 'react-router';
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       repos: []
     }
-
   }
+
+  // componentDidMount() {
+  //   $.get("http://localhost:1128/repos", (repo, status) => {
+  //     this.setState({
+  //       repos: repo
+  //     })
+  //   });
+  // }
 
   search(term) {
     console.log(`${term} was searched`);
-    // TODO
     $.ajax({
       type: "POST",
       url: "http://localhost:1128/repos",
-      // Maybe I need to turn this into Object.
-      data: JSON.stringify({ term }),
+      data: { username: term },
       success: function () {
         console.log('success')
       },
+    });
+
+    $.get("http://localhost:1128/repos", (repo, status) => {
+      this.setState({
+        repos: repo
+      })
     });
   }
 
@@ -31,7 +43,8 @@ class App extends React.Component {
     return (<div>
       <h1>Github Fetcher</h1>
       <RepoList repos={this.state.repos} />
-      <Search onSearch={this.search.bind(this)} />
+      <Search onSearch={this.search.bind(this)} onRepo={this.onRepo} />
+      <Repos repos={this.state.repos} />
     </div>)
   }
 }

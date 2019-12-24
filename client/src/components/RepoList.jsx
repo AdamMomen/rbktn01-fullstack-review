@@ -1,10 +1,10 @@
 import React from 'react';
-
 const RepoList = (props) => (
-  <div>
-    <h4> Repo List Component </h4>
+
+  <div >
+    <h1> ADAM </h1>
     There are {props.repos.length} repos.
-  </div>
+  </div >
 )
 
 export default RepoList;

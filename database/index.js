@@ -1,31 +1,40 @@
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/fetcher');
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  conseol.log('connected!')
-});
-
 let repoSchema = mongoose.Schema({
-  // TODO: your schema here!
   id: Number,
   name: String,
-  ownerID: Number,
+  owner_login: String,
+  owner_ID: Number,
+  forks_count: Number,
+  html_url: String,
 });
 
 
 let Repo = mongoose.model('Repo', repoSchema);
+var save = (objOfData, callback) => {
 
-// recieving an object of data
-let save = (/* TODO */) => {
-
-
-
-
-  // TODO: Your code here
-  // This function should save a repo or repos to
-  // the MongoDB
+  Repo.create({
+    id: objOfData.id,
+    name: objOfData.name,
+    owner_login: objOfData.owner.login,
+    owner_ID: objOfData.owner.id,
+    forks_count: objOfData.forks_count,
+    html_url: objOfData.html_url,
+  })
+    .then(result => {
+      console.log('repo saved successfully! ', result)
+      callback(result)
+    })
 }
 
+var find = (query = {}, callback) => {
+  Repo.find(query).limit(25)
+    //this is for sorting
+    //.sort(-1)
+    .then(result => {
+      callback(null, result)
+    });
+}
 module.exports.save = save;
+module.exports.find = find;

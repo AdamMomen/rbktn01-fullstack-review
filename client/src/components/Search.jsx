@@ -17,6 +17,10 @@ class Search extends React.Component {
 
   search() {
     this.props.onSearch(this.state.term);
+    //this is edited to reset the input box
+    this.setState({
+      term: '',
+    })
   }
 
   render() {
